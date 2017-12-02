@@ -30,3 +30,6 @@ lib\fs\fs::inc('lib/http/parser.php');
 lib\fs\fs::inc('lib/http/api.php');
 
 lib\fs\fs::inc('lib/fs/fm.php');
+
+lib\fs\fs::inc('lib/mail/mail.php');
+lib\fs\fs::inc('lib/mail/mailer.php');

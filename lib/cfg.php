@@ -21,6 +21,9 @@ class cfg
             'port' => 3306,
             'charset' => 'utf8mb4'
         ];
+        $cfg->mail = [
+            'from' => 'system@domain.com'
+        ];
 
         return $cfg;
     }

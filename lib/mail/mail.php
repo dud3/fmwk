@@ -1,5 +1,7 @@
 <?php
 
+namespace lib\mail;
+
 /**
  * version: 1.7
  * link: http://github.com/eoghanobrien/php-simple-mail
