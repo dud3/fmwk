@@ -104,7 +104,14 @@ class arr
     {
         $this->_arr[$key] = $val;
     }
-
+    
+    public function replace(array $arr = [])
+    {
+        foreach($arr as $k => $v) {
+            $this->changeElem($k, $v);
+        }
+    }
+    
     public function set(array $arr)
     {
         $this->_arr = $arr;
