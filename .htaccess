@@ -1,8 +1,12 @@
+DirectoryIndex index.php
+
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php
+RewriteRule ^ index.php [L]
 
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteRule ^/media http://example.com/ [R=301,L]
-# not sure if the '/' after '^' should be there, so remove if not working
+RewriteRule !^(public/|index\.php) [NC,F]
+
+Options -Indexes
+ErrorDocument 403 /.error/error.php?p=404

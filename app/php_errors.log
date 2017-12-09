@@ -1,0 +1,2 @@
+[09-Dec-2017 18:50:29 UTC] PHP Fatal error:  Class 'lib\app\instance\ctrl' not found in /home/ubuntu/workspace/app/ctrl/index.php on line 7
+[09-Dec-2017 18:53:37 UTC] PHP Fatal error:  Class 'lib\app\instance\ctrl' not found in /home/ubuntu/workspace/app/ctrl/index.php on line 7
