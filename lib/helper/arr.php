@@ -95,11 +95,6 @@ class arr
         return null;
     }
 
-    public function get()
-    {
-        return $this->_arr;
-    }
-
     public function changeElem($key, $val)
     {
         $this->_arr[$key] = $val;
@@ -110,6 +105,11 @@ class arr
         foreach($arr as $k => $v) {
             $this->changeElem($k, $v);
         }
+    }
+    
+    public function get()
+    {
+        return $this->_arr;
     }
     
     public function set(array $arr)
