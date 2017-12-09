@@ -2,7 +2,7 @@
 
 namespace app\ctrl;
 
-\lib\sys\module::inc('app/ctrl/ctrl');
+use \lib\app\instance\ctrl as ctrl;
 
 class auth extends ctrl
 {

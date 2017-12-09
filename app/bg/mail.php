@@ -2,7 +2,7 @@
 
 namespace app\bg;
 
-\lib\fs\fs::inc('app/bg/bg.php');
+use \lib\app\instance\bg as bg;
 
 class mail extends bg
 {

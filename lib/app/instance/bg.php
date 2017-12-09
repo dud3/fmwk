@@ -1,6 +1,6 @@
 <?php
 
-namespace app\bg;
+namespace lib\app\instance;
 
 // Background jobs
 class bg

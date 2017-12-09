@@ -1,6 +1,6 @@
 <?php
 
-namespace app\ctrl;
+namespace lib\app\instance;
 
 class ctrl
 {

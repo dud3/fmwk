@@ -33,3 +33,5 @@ lib\fs\fs::inc('lib/fs/fm.php');
 
 lib\fs\fs::inc('lib/mail/mail.php');
 lib\fs\fs::inc('lib/mail/mailer.php');
+
+lib\fs\fs::inc('lib/app/instance/instance.php');
