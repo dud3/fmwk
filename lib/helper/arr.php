@@ -95,16 +95,23 @@ class arr
         return null;
     }
 
-    public function get()
-    {
-        return $this->_arr;
-    }
-
     public function changeElem($key, $val)
     {
         $this->_arr[$key] = $val;
     }
-
+    
+    public function replace(array $arr = [])
+    {
+        foreach($arr as $k => $v) {
+            $this->changeElem($k, $v);
+        }
+    }
+    
+    public function get()
+    {
+        return $this->_arr;
+    }
+    
     public function set(array $arr)
     {
         $this->_arr = $arr;
