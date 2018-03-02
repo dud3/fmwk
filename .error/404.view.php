@@ -1,3 +1,3 @@
 <?php
 
-echo "test again";
+echo "<h2>Page not found</h2>";

@@ -14,6 +14,7 @@ lib\fs\fs::inc('lib/helper/helper.php');
 lib\fs\fs::inc('lib/prt.php');
 lib\fs\fs::inc('lib/debug.php');
 lib\fs\fs::inc('lib/cfg.php');
+lib\fs\fs::inc('lib/constant.php');
 
 lib\fs\fs::inc('lib/db/db.php');
 lib\fs\fs::inc('lib/db/tbl.php');

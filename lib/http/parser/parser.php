@@ -1,6 +1,6 @@
 <?php
 
-namespace lib\http;
+namespace lib\http\parser;
 
 use \lib\helper\obj as obj;
 use \lib\helper\str as str;
