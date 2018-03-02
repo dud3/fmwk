@@ -1,3 +1,3 @@
 <?php
 
-echo "<h2>Page not found</h2>";
+echo "<h1>Page not found!</h1>";
