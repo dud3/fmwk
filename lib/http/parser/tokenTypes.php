@@ -6,6 +6,7 @@ abstract class tokenTypes
 {
     const START = 'start';
     const END = 'end';
+    const SLTASH = 'slash';
     const _AND = 'and';
     const _OR = 'or';
     const EQUAL = 'equal';

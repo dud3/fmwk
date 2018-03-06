@@ -1,6 +1,7 @@
 <?php
 
-require_once('lib/_deps.php');
+require_once('lib/_preboot.php');
+require_once('lib/_boot.php');
 
 lib\debug::enable(true);
 

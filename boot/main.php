@@ -1,6 +1,6 @@
 <?php
 
-require_once "lib/_deps.php";
+require_once "lib/_preboot.php";
 
 // Bootstrap
 
@@ -13,6 +13,8 @@ lib\cfg::load('c9');
 // Debug mode
 
 lib\debug::enable(lib\cfg::$cfg->debug);
+
+require_once "lib/_boot.php";
 
 // Ctrl
 

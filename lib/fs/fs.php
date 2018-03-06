@@ -13,13 +13,15 @@ class fs
         }
     }
 
-    public static function inc($file = null)
+    public static function inc($file = null, bool $exit = false)
     {
         try {
             self::check($file);
         }
         catch (Exception $e)
         {
+            if($exit) exit("{$e->getMessage()}");
+
             throw new Exception ("{$file} does not exist");
         }
 

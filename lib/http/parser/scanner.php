@@ -12,18 +12,31 @@ class scanner
 {
     private $tokens = [];
 
-    private $input;
+    private $source;
+    private $start = 0;
     private $cur = 0;
     private $len;
 
-    public function __construct($input = null)
-    {
-        $this->input = $input;
+    private $hadError = false;
 
-        $this->cur = 0;
-        $this->len = strlen($this->input);
+    public function __construct($source = null)
+    {
+        $this->source = $source;
+
+        $this->len = strlen($this->source);
 
         $this->scan();
+    }
+
+    private function scanTokens()
+    {
+        while(!$this->isAtEnd()) {
+            $this->start = $this->cur;
+
+            $this->scan();
+        }
+
+        return $this->tokens;
     }
 
     // [key_condition_value]
@@ -31,99 +44,123 @@ class scanner
 
     private function scan()
     {
-        if($this->input == null || $this->input == '') return false;
+        if($this->source == null || $this->source == '') return false;
 
-        for($this->cur; $this->cur < $this->len; $this->cur++)
-        {
-            if($this->cur > 0) {
-                $p = $this->input[$this->cur - 1];
-            }
+        $c = $this->advance()
 
-            $c = $this->input[$this->cur];
+        switch ($c) {
 
-            if($this->cur + 1 < $this->len) {
-                $n = $this->input[$this->cur + 1];
-            }
+            case '[':
+                $this->tokens[] = new Token(TokenTypes::START, '[');
+                break;
 
-            if(!$this->isInGrammar($c)) break;
+            case ']':
+                $this->tokens[] = new Token(TokenTypes::END, ']');
+                break;
 
-            switch ($c) {
+            case '/':
+                $this->tokens[] = new Token(TokenTypes::SLASH, '/');
+                break;
 
-                case '[':
-                    $this->tokens[] = new Token(TokenTypes::START, '[');
-                    break;
+            case ' ':
+            case '\r':
+            case '\t':
+                // Ignore.
+                break;
 
-                case ']':
-                    $this->tokens[] = new Token(TokenTypes::END, ']');
-                    break;
+            case '^':
+                $this->tokens[] = new Token(TokenTypes::_AND, 'and', 'conditional');
+                break;
 
-                case '^':
-                    $this->tokens[] = new Token(TokenTypes::_AND, 'and', 'conditional');
-                    break;
+            case '|':
+                $this->tokens[] = new Token(TokenTypes::_OR, 'or', 'conditional');
+                break;
 
-                case '|':
-                    $this->tokens[] = new Token(TokenTypes::_OR, 'or', 'conditional');
-                    break;
+            case '=':
+                $this->tokens[] = new Token(TokenTypes::EQUAL, '=', 'conditional');
+                break;
 
-                case '=':
-                    $this->tokens[] = new Token(TokenTypes::EQUAL, '=', 'conditional');
-                    break;
+            case '>':
 
-                case '>':
+                if($this->peek() == '=') {
+                    $this->tokens[] = new Token(TokenTypes::GREATER_EQUAL, '>=', 'conditional');
+                    $this->cur++;
+                } else {
+                    $this->tokens[] = new Token(TokenTypes::GREATER, '>', 'conditional');
+                }
 
-                    if($n == '=') {
-                        $this->tokens[] = new Token(TokenTypes::GREATER_EQUAL, '>=', 'conditional');
-                        $this->cur++;
+                break;
+
+            case '<':
+
+                if($this->peek() == '=') {
+                    $this->tokens[] = new Token(TokenTypes::LESS_EQUAL, '<=', 'conditional');
+                    $this->cur++;
+                } else {
+                    $this->tokens[] = new Token(TokenTypes::LESS, '<', 'conditional');
+                }
+
+                break;
+
+            default:
+
+                $str = '';
+
+                while($this->isAlphaNumeric($c)) {
+                    $str .= $c;
+                    $this->cur++;
+
+                    if(!isset($this->source[$this->cur])) break;
+
+                    $c = $this->source[$this->cur];
+                }
+
+                if(isset($this->source[$this->cur]))
+                    $this->cur--;
+
+                if($str != '') {
+                    $htmlInput = null;
+                    if($c == '>' || $c == '>=' || $c == '<' || $c == '<=' || $c == '=') {
+                        $htmlInput = $str;
+                        $str = "`{$str}`";
                     } else {
-                        $this->tokens[] = new Token(TokenTypes::GREATER, '>', 'conditional');
+                        $str = "'{$str}'";
                     }
+                    $this->tokens[] = new Token(TokenTypes::ALPHANUMERIC, "{$str}", 'string', $htmlInput);
+                }
 
-                    break;
-
-                case '<':
-
-                    if($n == '=') {
-                        $this->tokens[] = new Token(TokenTypes::LESS_EQUAL, '<=', 'conditional');
-                        $this->cur++;
-                    } else {
-                        $this->tokens[] = new Token(TokenTypes::LESS, '<', 'conditional');
-                    }
-
-                    break;
-
-                default:
-
-                    $str = '';
-
-                    while($this->isAlphaNumeric($c)) {
-                        $str .= $c;
-                        $this->cur++;
-
-                        if(!isset($this->input[$this->cur])) break;
-
-                        $c = $this->input[$this->cur];
-                    }
-
-                    if(isset($this->input[$this->cur]))
-                        $this->cur--;
-
-                    if($str != '') {
-                        $htmlInput = null;
-                        if($c == '>' || $c == '>=' || $c == '<' || $c == '<=' || $c == '=') {
-                            $htmlInput = $str;
-                            $str = "`{$str}`";
-                        } else {
-                            $str = "'{$str}'";
-                        }
-                        $this->tokens[] = new Token(TokenTypes::ALPHANUMERIC, "{$str}", 'string', $htmlInput);
-                    }
-
-                    break;
-            }
+                break;
         }
     }
 
-    private function isAlpha($c = '')
+    private function advance()
+    {
+        $this->cur++;
+        return $this->source[$this->cur - 1];
+    }
+
+    private function match(string $expected)
+    {
+        if($this->isAtEnd()) return false;
+        if($this->source[$this->cur] != $expected) return false;
+
+        $this->cur++;
+        return true;
+    }
+
+    private function peek()
+    {
+        if($this->isEndLine()) return '\0';
+        return $this->source[$this->cur]; // lookahead: one further than actual current
+    }
+
+    private function peekNext()
+    {
+        if ($this->cur + 1 >= $this->len) return '\0';
+        return $this->source[$this->cur + 1];
+    }
+
+    private function isAlpha(string $c = '')
     {
         return ($c >= 'a' && $c <= 'z') ||
                 ($c >= 'A' && $c <= 'Z') ||
@@ -131,22 +168,17 @@ class scanner
                 $c == '-';
     }
 
-    private function isDigit($c)
+    private function isDigit(string $c)
     {
         return $c >= '0' && $c <= '9';
     }
 
-    private function isAlphaNumeric($c)
+    private function isAlphaNumeric(string $c)
     {
         return $this->isDigit($c) || $this->isAlpha($c);
     }
 
-    private function isEnd($c)
-    {
-        return $c == ']';
-    }
-
-    private function isInGrammar($c)
+    private function isInGrammar(string $c)
     {
         return $c == '[' || $c == ']'
                 || $c == '>' || $c == '<'
@@ -156,9 +188,9 @@ class scanner
                 || $this->isAlphaNumeric($c);
     }
 
-    private function isEndLine()
+    private function isAtEnd()
     {
-        $this->cur + 1 < $this->len - 1;
+        $this->cur < $this->len - 1;
     }
 
     public function getTokens()
@@ -169,6 +201,11 @@ class scanner
     public function getTokensLength()
     {
         return count($this->tokens);
+    }
+
+    private static error(string $where, string $msg)
+    {
+
     }
 
 }
