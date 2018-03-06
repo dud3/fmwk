@@ -2,7 +2,7 @@
 
 require_once "lib/_preboot.php";
 
-// Bootstrap
+// Pre-Bootstrap
 
 lib\sys\version::check();
 
@@ -13,6 +13,8 @@ lib\cfg::load('c9');
 // Debug mode
 
 lib\debug::enable(lib\cfg::$cfg->debug);
+
+// Bootstrap
 
 require_once "lib/_boot.php";
 

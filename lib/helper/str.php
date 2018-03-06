@@ -58,4 +58,9 @@ class str
     {
         $this->_str = $str;
     }
+
+    public function print()
+    {
+        echo $this->_str;
+    }
 }

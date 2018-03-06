@@ -2,15 +2,15 @@
 
 namespace lib\helper;
 
-use \lib\sys\typech as typech;
-
 class obj
 {
     private $_obj;
 
-    public function __construct()
+    public function __construct(array $arr)
     {
         $this->_obj = new stdClass;
+
+        $this->set($arr);
 
         return $this;
     }

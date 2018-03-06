@@ -17,13 +17,15 @@ class scanner
     private $cur = 0;
     private $len;
 
-    private $hadError = false;
+    private $error;
 
     public function __construct($source = null)
     {
         $this->source = $source;
 
         $this->len = strlen($this->source);
+
+        $this->error = new obj(['error' => false, 'msg' => new str('')]);
 
         $this->scan();
     }
@@ -46,7 +48,7 @@ class scanner
     {
         if($this->source == null || $this->source == '') return false;
 
-        $c = $this->advance()
+        $c = $this->advance();
 
         switch ($c) {
 
@@ -203,9 +205,11 @@ class scanner
         return count($this->tokens);
     }
 
-    private static error(string $where, string $msg)
+    private static function error(string $where, string $msg)
     {
+        $this->error->get()->msg->set("Error at {$where}, {$msg}");
 
+        return $this->error;
     }
 
 }
