@@ -6,7 +6,7 @@ use stdClass;
 
 use lib\http\parser\TokenType as TokenType;
 
-class Compiler
+class compiler
 {
     private $error;
     private $str;
