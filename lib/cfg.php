@@ -32,8 +32,9 @@ class cfg
     {
         if($env == null) {
             \lib\fs\fs::inc('cfg/cfg.dev.php');
+        } else {
+            // todo: try catch
+            \lib\fs\fs::inc('cfg/cfg.'.$env.'.php');
         }
-
-        \lib\fs\fs::inc('cfg/cfg.'.$env.'.php');
     }
 }
