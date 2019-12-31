@@ -17,16 +17,12 @@ class obj
 
     public function uset(string $key)
     {
-        if($key != null) {
-            unset($this->_obj->$key);
-        }
+        if($key != null) unset($this->_obj->$key);
     }
 
     public function set(array $arr)
     {
-        foreach($arr as $k => $v) {
-            $this->_obj->$k = $v;
-        }
+        foreach($arr as $k => $v) $this->_obj->$k = $v;
     }
 
     public function get()
